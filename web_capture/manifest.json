@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "WP Product Importer Pro",
+  "name": "Web Capture for WP",
   "version": "2.0",
   "description": "Extractor universal con reglas dinámicas y modo masivo",
   "permissions": [
@@ -24,5 +24,11 @@
   },
   "background": {
     "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
   }
 }

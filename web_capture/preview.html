@@ -2,81 +2,61 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>📦 Adaptar y Previsualizar Producto</title>
+    <title>Adaptar Producto</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; color: #333; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; padding: 20px; color: #333; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .btn-primary { background-color: #ffed2b; color: #000; border: 1px solid #ccc; padding: 10px 20px; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 16px; }
-        .btn-primary:hover { background-color: #e6d200; }
-        .panel { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .panel { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         label { font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; }
-        input[type="text"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
-        textarea { resize: vertical; }
-        
-        /* Estilos para la galería arrastrable */
+        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
         .gallery-container { margin-bottom: 15px; }
-        .gallery { display: flex; gap: 15px; overflow-x: auto; padding: 15px; border: 2px dashed #ccc; border-radius: 8px; min-height: 120px; background-color: #fafafa; align-items: center;}
-        .gallery-item { position: relative; cursor: grab; width: 100px; flex-shrink: 0; transition: transform 0.2s;}
-        .gallery-item.dragging { opacity: 0.4; cursor: grabbing; transform: scale(1.05); }
+        .gallery { display: flex; gap: 15px; overflow-x: auto; padding: 15px; border: 2px dashed #ccc; border-radius: 8px; background: #fafafa; }
+        .gallery-item { position: relative; cursor: grab; width: 100px; flex-shrink: 0; }
+        .gallery-item.dragging { opacity: 0.4; }
         .gallery-item img { width: 100px; height: 100px; object-fit: contain; border-radius: 6px; background: white; border: 1px solid #ddd; pointer-events: none;}
         .gallery-item .badge { position: absolute; bottom: -20px; left: 0; right: 0; text-align: center; font-size: 11px; font-weight: bold; color: #555;}
-        .gallery-item:first-child .badge { color: #0067FF; } /* Destacar la primera imagen */
-        
-        /* Botón de eliminar imagen */
-        .delete-btn { position: absolute; top: -8px; right: -8px; background: #ff4d4d; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); padding: 0;}
-        .delete-btn:hover { background: #e60000; transform: scale(1.1); }
-
+        .gallery-item:first-child .badge { color: #0067FF; }
+        .delete-btn { position: absolute; top: -8px; right: -8px; background: #ff4d4d; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer; display: flex; justify-content: center; align-items: center; }
         iframe { width: 100%; height: 800px; border: none; border-radius: 10px; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
-
     <div class="header">
-      <div style="background: #e9ecef; padding: 10px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
-          <button id="btnPrev" style="padding:5px 15px; font-weight:bold;">⬅️ Anterior</button>
-          <strong id="slideCounter">Producto 1 de X</strong>
-          <button id="btnNext" style="padding:5px 15px; font-weight:bold;">Siguiente ➡️</button>
+      <div style="background: #e9ecef; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 15px;">
+          <button id="btnPrev" data-i18n="prevBtnPrev"></button>
+          <strong id="slideCounter"></strong>
+          <button id="btnNext" data-i18n="prevBtnNext"></button>
       </div>
-        <h2>✏️ Ajustar Producto antes de Publicar</h2>
-        <button id="btnPublish" class="btn-primary">🚀 Publicar en WordPress</button>
+        <h2 data-i18n="prevTitle"></h2>
+        <button id="btnLang" class="settings-btn" title="Change Language">🇪🇸</button>
+        <button id="btnPublish" class="btn-primary" data-i18n="prevBtnPub"></button>
     </div>
 
     <div class="panel">
         <div class="grid">
-            <div>
-                <label>Título del Producto</label>
-                <input type="text" id="editTitle">
-            </div>
-            <div>
-                <label>Precio (€)</label>
-                <input type="text" id="editPrice">
-            </div>
-            <div>
-                <label>Kodas (SKU)</label>
-                <input type="text" id="editSku">
-            </div>
-            <div>
-                <label>Categoría</label>
-                <input type="text" id="editCategory">
-            </div>
+            <div><label data-i18n="prevLblTitle"></label><input type="text" id="editTitle"></div>
+            <div><label data-i18n="prevLblPrice"></label><input type="text" id="editPrice"></div>
+            <div><label data-i18n="prevLblSku"></label><input type="text" id="editSku"></div>
+            <div><label data-i18n="prevLblCat"></label><input type="text" id="editCategory"></div>
         </div>
 
         <div class="gallery-container">
-            <label>🖼️ Ordenar Imágenes (Arrastra para reordenar, pulsa la X para borrar. La primera será la principal)</label>
-            <div id="imageGallery" class="gallery">
-                </div>
+            <label data-i18n="prevLblImg"></label>
+            <div id="imageGallery" class="gallery"></div>
         </div>
 
         <div>
-            <label>Descripción HTML (Especificaciones)</label>
+            <label data-i18n="prevLblDesc"></label>
             <textarea id="editDesc" rows="5"></textarea>
         </div>
     </div>
 
-    <h3>👁️ Vista Final en tu Plantilla (Tiempo Real)</h3>
+    <h3 data-i18n="prevLiveTitle"></h3>
     <iframe id="livePreview"></iframe>
 
+    <script src="lang/i18n.js"></script>
     <script src="preview.js"></script>
 </body>
 </html>

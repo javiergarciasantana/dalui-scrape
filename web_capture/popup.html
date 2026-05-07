@@ -4,23 +4,13 @@
     <meta charset="UTF-8">
     <style>
         body { font-family: sans-serif; width: 320px; padding: 15px; text-align: center; color: #333; }
-        
-        /* Contenedor superior para pestañas y engranaje */
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        
-        /* Pestañas */
         .nav { display: flex; gap: 5px; }
         .nav button { margin: 0; background: #eee; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; color: #555; }
         .nav button.active { background: #ffed2b; color: #000; }
-        
-        /* Engranaje */
-        .settings-btn { background: none; border: none; font-size: 20px; cursor: pointer; padding: 5px; border-radius: 50%; transition: background 0.2s; }
+        .settings-btn { background: none; border: none; font-size: 20px; cursor: pointer; padding: 5px; border-radius: 50%; }
         .settings-btn:hover { background: #f0f0f0; }
-
-        /* Botones principales de acción */
-        .action-btn { background: #ffed2b; border: none; padding: 12px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .action-btn:hover { background: #fddb00; }
-        
+        .action-btn { background: #ffed2b; border: none; padding: 12px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; font-size: 14px; }
         textarea { width: 100%; box-sizing: border-box; margin-top: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: vertical; }
         .tab { display: none; }
         .tab.active { display: block; }
@@ -30,23 +20,24 @@
 <body>
     <div class="top-bar">
         <div class="nav">
-            <button id="btnTab1" class="active">Actual</button>
-            <button id="btnTab2">Bulk</button>
+            <button id="btnTab1" class="active" data-i18n="tabActual"></button>
+            <button id="btnTab2" data-i18n="tabBulk"></button>
         </div>
-        <button id="btnOptions" class="settings-btn" title="Configurar Reglas">⚙️</button>
+        <div>
+            <button id="btnLang" class="settings-btn" title="Change Language">🇪🇸</button>
+            <button id="btnOptions" class="settings-btn" title="Settings">⚙️</button>
+        </div>
     </div>
-
     <div id="tab1" class="tab active">
-        <p>Extrae el producto de la pestaña en la que estás navegando ahora mismo.</p>
-        <button id="extractSingle" class="action-btn">Extraer Producto</button>
+        <p data-i18n="popDesc1"></p>
+        <button id="extractSingle" class="action-btn" data-i18n="popBtn1"></button>
     </div>
-
     <div id="tab2" class="tab">
-        <p>Pega hasta 5 URLs del mismo dominio (una por línea):</p>
+        <p data-i18n="popDesc2"></p>
         <textarea id="bulkUrls" rows="5" placeholder="https://daliubaze.lt/..."></textarea>
-        <button id="extractBulk" class="action-btn">Extraer Cola</button>
+        <button id="extractBulk" class="action-btn" data-i18n="popBtn2"></button>
     </div>
-
+    <script src="lang/i18n.js"></script>
     <script src="popup.js"></script>
 </body>
 </html>
