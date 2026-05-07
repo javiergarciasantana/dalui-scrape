@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "WP Product Importer Pro",
+  "version": "2.0",
+  "description": "Extractor universal con reglas dinámicas y modo masivo",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "options_page": "options.html",
+  "web_accessible_resources": [
+    {
+      "resources": ["article_page_gnz.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

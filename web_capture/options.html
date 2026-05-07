@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Configuración de Reglas</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; padding: 30px; max-width: 800px; margin: auto; background-color: #f4f7f6; color: #333; }
+        .rule-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #e0e0e0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; color: #555; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        button { border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
+        #saveRule { background: #0067FF; color: white; width: 100%; font-size: 16px; margin-top: 10px; }
+        .btn-edit { background: #ffed2b; color: #000; }
+        .btn-delete { background: #ff4d4d; color: white; }
+        button:hover { opacity: 0.8; }
+        
+        .rule-item { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid #0067FF; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .rule-info { flex-grow: 1; }
+        .rule-info strong { font-size: 16px; color: #0067FF; }
+        .rule-info p { margin: 5px 0 0; font-size: 12px; color: #777; }
+    </style>
+</head>
+<body>
+    <h2>⚙️ Configuración de Reglas</h2>
+    
+    <div class="rule-card">
+        <h3 id="formTitle">Añadir Nueva Regla</h3>
+        <input type="hidden" id="editModeDomain"> <div class="form-group">
+            <label>Dominio (ej. daliubaze.lt)</label>
+            <input type="text" id="rDomain" placeholder="daliubaze.lt">
+        </div>
+        <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+                <label>Selector del Título</label>
+                <input type="text" id="rTitle" placeholder="h1">
+            </div>
+            <div class="form-group">
+                <label>Selector del Precio</label>
+                <input type="text" id="rPrice" placeholder=".price">
+            </div>
+        </div>
+        <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+                <label>Selector de Imágenes</label>
+                <input type="text" id="rImages" placeholder=".product-images img">
+            </div>
+            <div class="form-group">
+                <label>Selector SKU (Kodas)</label>
+                <input type="text" id="rSku" placeholder=".sku">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Selector de Descripción / Specs (opcional)</label>
+            <input type="text" id="rDesc" placeholder=".product-information table">
+        </div>
+        
+        <button id="saveRule">Guardar Regla</button>
+        <button id="cancelEdit" style="display: none; background: #ccc; margin-top: 10px; width: 100%;">Cancelar Edición</button>
+    </div>
+
+    <h3>Reglas Activas</h3>
+    <div id="rulesList"></div>
+
+    <script src="options.js"></script>
+</body>
+</html>
