@@ -12,11 +12,10 @@
         .rule-card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #e0e0e0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .form-group { margin-bottom: 15px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; color: #555; }
-        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
-        textarea { resize: vertical; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
         .btn-group { display: flex; gap: 10px; margin-top: 10px; }
         button { border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: opacity 0.2s; }
-        #saveRule { background: #0067FF; color: white; width: 100%; font-size: 16px; margin-top: 10px; }
+        #saveRule, #saveCreds { background: #0067FF; color: white; width: 100%; font-size: 16px; margin-top: 10px; }
         .btn-edit { background: #ffed2b; color: #000; }
         .btn-delete { background: #ff4d4d; color: white; }
         button:hover { opacity: 0.8; }
@@ -32,10 +31,28 @@
         <h2 data-i18n="optTitle" style="margin: 0;"></h2>
         <button id="btnLang" class="settings-btn" title="Change Language">🇪🇸</button>
     </div>
+
+    <div class="rule-card" style="border-left: 5px solid #FFB81C;">
+        <h3>🔑 Credenciales API de WordPress</h3>
+        <div class="form-group">
+            <label>URL de WordPress (ej. https://tudominio.com)</label>
+            <input type="text" id="wcUrl" placeholder="https://...">
+        </div>
+        <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group">
+                <label>Consumer Key</label>
+                <input type="password" id="wcKey" placeholder="ck_...">
+            </div>
+            <div class="form-group">
+                <label>Consumer Secret</label>
+                <input type="password" id="wcSecret" placeholder="cs_...">
+            </div>
+        </div>
+        <button id="saveCreds">Guardar Credenciales Seguras</button>
+    </div>
     
     <div class="rule-card">
         <h3 id="formTitle" data-i18n="optAddRule"></h3>
-        
         <div class="form-group">
             <label data-i18n="optDom"></label>
             <input type="text" id="rDomain" placeholder="daliubaze.lt">
@@ -62,7 +79,7 @@
         </div>
         <div class="form-group">
             <label>Selectores de Descripción (puedes agrupar varios separados por comas ",")</label>
-            <textarea id="rDesc" rows="3" placeholder="Ejemplo: #productDescriptionAccordion, #productDetailsAccordion, .extra-specs"></textarea>
+            <textarea id="rDesc" rows="3" placeholder="Ejemplo: #productDescriptionAccordion, #productDetailsAccordion"></textarea>
         </div>
         
         <button id="saveRule" data-i18n="optBtnSave"></button>

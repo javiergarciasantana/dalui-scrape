@@ -1,14 +1,32 @@
 // Esperar a que cargue el DOM y los idiomas antes de mostrar las reglas
 document.addEventListener('DOMContentLoaded', async () => {
-    await initI18n(); // ¡Esta es la línea mágica que inyecta el texto en el HTML!
+    await initI18n(); 
     
-    // Escuchar clics en la bandera para cambiar de idioma
-    const btnLang = document.getElementById('btnLang');
-    if (btnLang) {
-        btnLang.addEventListener('click', toggleLang);
-    }
+    document.getElementById('btnLang').addEventListener('click', toggleLang);
     
+    // --- NUEVO: Cargar credenciales guardadas ---
+    chrome.storage.local.get(['wcCredentials'], (data) => {
+        if (data.wcCredentials) {
+            document.getElementById('wcUrl').value = data.wcCredentials.url || "";
+            document.getElementById('wcKey').value = data.wcCredentials.key || "";
+            document.getElementById('wcSecret').value = data.wcCredentials.secret || "";
+        }
+    });
+
     loadRules();
+});
+
+document.getElementById('saveCreds').addEventListener('click', () => {
+    const creds = {
+        // Quitamos la última barra si el usuario la pone por error
+        url: document.getElementById('wcUrl').value.replace(/\/$/, '').trim(), 
+        key: document.getElementById('wcKey').value.trim(),
+        secret: document.getElementById('wcSecret').value.trim()
+    };
+    
+    chrome.storage.local.set({ wcCredentials: creds }, () => {
+        alert("¡Credenciales API guardadas de forma segura!");
+    });
 });
 
 const saveBtn = document.getElementById('saveRule');

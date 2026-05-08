@@ -19,6 +19,26 @@ function sanitizeHTML(rawHtml) {
     return doc.body.innerHTML;
 }
 
+// --- NUEVA FUNCIÓN: Limpiar URLs de imágenes para WordPress ---
+function cleanImageUrlForWooCommerce(url) {
+    try {
+        let urlObj = new URL(url);
+        
+        // Caso especial para las imágenes de Senukai
+        if (urlObj.hostname.includes('ksd-images.lt') && urlObj.searchParams.has('path')) {
+            let realPath = urlObj.searchParams.get('path');
+            // Convierte /display?path=foto.png en /display/foto.png
+            return `https://${urlObj.hostname}/display/${realPath}`;
+        }
+
+        // Para otras tiendas, quitar los parámetros extra (?resize=...) deja la foto original limpia y en HD
+        urlObj.search = ""; 
+        return urlObj.toString();
+    } catch (e) {
+        return url; // Si falla, devuelve la original por si acaso
+    }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     await initI18n(); // Iniciar idiomas
     document.getElementById('btnLang').addEventListener('click', toggleLang);
@@ -193,20 +213,80 @@ function updateLivePreview() {
         images.forEach((imgUrl) => { galleryHtml += `<div class="gallery-slide"><img src="${imgUrl}" /></div>`; });
         html = html.replace(/<div class="woocommerce-product-gallery__wrapper[^>]*>[\s\S]*?(?=<\/div>\s*<div class="image-tools absolute bottom left)/, `<div class="gnz-custom-gallery">\n${galleryHtml}`);
     }
-
     document.getElementById('livePreview').srcdoc = html;
 }
 
 document.getElementById('btnPublish').addEventListener('click', () => {
-    // Aquí es donde mandaremos finalmente los datos a la API
-    console.log({
-        title: document.getElementById('editTitle').value,
-        price: document.getElementById('editPrice').value,
-        sku: document.getElementById('editSku').value,
-        qty: document.getElementById('editQty').value, // Tu nuevo campo Qty
-        category: document.getElementById('editCategory').value,
-        imgs: getCurrentImages(), 
-        desc: document.getElementById('editDesc').innerHTML // Obtenemos el HTML formateado del editor
+    const btn = document.getElementById('btnPublish');
+    const originalText = btn.innerText;
+
+    // 1. Extraer los datos guardados en la memoria de Chrome
+    chrome.storage.local.get(['wcCredentials'], async (data) => {
+        // Validar que hemos guardado las credenciales antes
+        if (!data.wcCredentials || !data.wcCredentials.url || !data.wcCredentials.key || !data.wcCredentials.secret) {
+            alert("⚠️ No has configurado la API de WooCommerce. Ve al icono del engranaje (⚙️) para configurar tus credenciales.");
+            return;
+        }
+
+        const WC_URL = data.wcCredentials.url;
+        const WC_KEY = data.wcCredentials.key;
+        const WC_SECRET = data.wcCredentials.secret;
+        
+        // Recopilamos los datos del editor visual
+        const finalData = {
+            title: document.getElementById('editTitle').value,
+            price: document.getElementById('editPrice').value,
+            sku: document.getElementById('editSku').value,
+            qty: document.getElementById('editQty').value,
+            category: document.getElementById('editCategory').value,
+            imgs: getCurrentImages(), 
+            desc: document.getElementById('editDesc').innerHTML 
+        };
+
+        btn.innerText = "⏳ Enviando a WordPress...";
+        btn.disabled = true;
+
+        try {
+            const woocommercePayload = {
+                name: finalData.title,
+                type: "simple",
+                regular_price: finalData.price.toString(),
+                sku: finalData.sku,
+                manage_stock: true,
+                stock_quantity: parseInt(finalData.qty) || 1,
+                description: finalData.desc,
+                status: "draft", // MODO BORRADOR
+                images: finalData.imgs.map(url => ({ 
+                    src: cleanImageUrlForWooCommerce(url) 
+                }))
+            };
+
+            const auth = btoa(`${WC_KEY}:${WC_SECRET}`);
+
+            const response = await fetch(`${WC_URL}/wp-json/wc/v3/products`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Basic ${auth}`
+                },
+                body: JSON.stringify(woocommercePayload)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert(`✅ ¡Éxito! Producto creado como BORRADOR (ID: ${result.id})`);
+            } else {
+                alert(`❌ Error de WooCommerce: ${result.message}`);
+                console.error(result);
+            }
+
+        } catch (error) {
+            alert("⚠️ Hubo un problema de conexión con tu web. Revisa que la URL de WordPress sea correcta en las opciones.");
+            console.error(error);
+        } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
     });
-    alert(t('msgReady') || "¡Producto configurado! Revisa la consola.");
 });
