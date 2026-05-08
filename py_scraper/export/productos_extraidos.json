@@ -1,0 +1,98 @@
+[
+    {
+        "titulo": "Durų užraktas FEBI BILSTEIN 172128",
+        "precio": "38.70 €",
+        "enlace": "https://daliubaze.lt/auto-dalys/duru-uzraktas-FEBI-BILSTEIN-172128/253491980#pav",
+        "detalles": {
+            "especificaciones": {
+                "Gamintojas": "FEBI BILSTEIN",
+                "Kodas": "172128",
+                "Porinis gaminio numeris": "172127",
+                "Jungčių skaičius": "7",
+                "Darbinis režimas": "Elektr.",
+                "Užrakinimo sistema": "Su dviguba reguliavimo sistema",
+                "Papildomas gaminys / papildoma informacija": "Su reguliatoriumi"
+            },
+            "imagenes_extra": [
+                "https://digital-assets.tecalliance.services/images/800/3dd753880298825bd3e8c3a85ed1618489935f72.jpg",
+                "https://digital-assets.tecalliance.services/images/800/6b13d4b416d04f95a936d2c159199631ee95b97f.jpg"
+            ],
+            "oe_numbers": []
+        }
+    },
+    {
+        "titulo": "Durų užraktas ESEN SKV 16SKV154",
+        "precio": "28.30 €",
+        "enlace": "https://daliubaze.lt/auto-dalys/duru-uzraktas-ESEN-SKV-16SKV154/559575#pav",
+        "detalles": {
+            "especificaciones": {
+                "Gamintojas": "ESEN SKV",
+                "Kodas": "16SKV154",
+                "Įtampa [V]": "12",
+                "Svoris [kg]": "0,74",
+                "Darbinis režimas": "Elektr.",
+                "Kištukinių kontaktų skaičius": "7",
+                "Garantija": "3 metų garantija",
+                "Porinis gaminio numeris": "16SKV153"
+            },
+            "imagenes_extra": [
+                "https://digital-assets.tecalliance.services/images/800/7f155b3fb4173ad295dddea65e0c66e8e16e322b.jpg",
+                "https://digital-assets.tecalliance.services/images/800/664a343a985bb83a0443272dc2e453fe1afd99d2.jpg",
+                "https://digital-assets.tecalliance.services/images/800/d944ca231e215fce53efc750de2a03d66ff84f85.jpg",
+                "https://digital-assets.tecalliance.services/images/800/083b6988b0ec0ed688153947358bbe5d2fa4e79f.jpg",
+                "https://digital-assets.tecalliance.services/images/800/398cea3cd734a02e270d75415110c75b7e8dfe95.jpg"
+            ],
+            "oe_numbers": []
+        }
+    },
+    {
+        "titulo": "Durų užraktas MAXGEAR 28-0458",
+        "precio": "29.70 €",
+        "enlace": "https://daliubaze.lt/auto-dalys/duru-uzraktas-MAXGEAR-28-0458/14070571#pav",
+        "detalles": {
+            "especificaciones": {
+                "Gamintojas": "MAXGEAR",
+                "Kodas": "28-0458",
+                "Kištukinių kontaktų skaičius": "7",
+                "Užrakinimo sistema": "Su centriniu užraktu"
+            },
+            "imagenes_extra": [
+                "https://digital-assets.tecalliance.services/images/800/1e2729b703a19f052b04d2d263e2cb2ca9a3a739.jpg",
+                "https://digital-assets.tecalliance.services/images/800/e199eee9aacadcc08f96bc2e3492b8fe88741d73.jpg",
+                "https://digital-assets.tecalliance.services/images/800/5ebc3451c983335024fbf4a6216c7f8a0dd5c45e.jpg"
+            ],
+            "oe_numbers": []
+        }
+    },
+    {
+        "titulo": "Durų užraktas vika 88391804101",
+        "precio": "36.30 €",
+        "enlace": "https://daliubaze.lt/auto-dalys/duru-uzraktas-vika-88391804101/277457236#pav",
+        "detalles": {
+            "especificaciones": {
+                "Gamintojas": "vika",
+                "Kodas": "88391804101"
+            },
+            "imagenes_extra": [
+                "https://digital-assets.tecalliance.services/images/800/da38ffe10fc8105f444fb25cfb9abfd8c36f53db.jpg"
+            ],
+            "oe_numbers": []
+        }
+    },
+    {
+        "titulo": "Durų užraktas TOPRAN 115 146",
+        "precio": "38.10 €",
+        "enlace": "https://daliubaze.lt/auto-dalys/duru-uzraktas-TOPRAN-115-146/276709427#pav",
+        "detalles": {
+            "especificaciones": {
+                "Gamintojas": "TOPRAN",
+                "Kodas": "115 146",
+                "Porinis gaminio numeris": "115 145"
+            },
+            "imagenes_extra": [
+                "https://digital-assets.tecalliance.services/images/800/4c4db0912ca4dd9c165d80c65ce2325387eca1c6.jpg"
+            ],
+            "oe_numbers": []
+        }
+    }
+]

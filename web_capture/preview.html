@@ -6,11 +6,17 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; padding: 20px; color: #333; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .header-actions { display: flex; align-items: center; gap: 15px; } 
         .btn-primary { background-color: #ffed2b; color: #000; border: 1px solid #ccc; padding: 10px 20px; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 16px; }
+        .settings-btn { background: white; border: 1px solid #ccc; font-size: 20px; cursor: pointer; padding: 5px; border-radius: 50%; transition: background 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .settings-btn:hover { background: #f0f0f0; }
+
         .panel { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        /* Hemos añadido la columna extra para el QTY */
+        .grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         label { font-weight: bold; display: block; margin-bottom: 5px; font-size: 14px; }
-        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        
         .gallery-container { margin-bottom: 15px; }
         .gallery { display: flex; gap: 15px; overflow-x: auto; padding: 15px; border: 2px dashed #ccc; border-radius: 8px; background: #fafafa; }
         .gallery-item { position: relative; cursor: grab; width: 100px; flex-shrink: 0; }
@@ -19,7 +25,21 @@
         .gallery-item .badge { position: absolute; bottom: -20px; left: 0; right: 0; text-align: center; font-size: 11px; font-weight: bold; color: #555;}
         .gallery-item:first-child .badge { color: #0067FF; }
         .delete-btn { position: absolute; top: -8px; right: -8px; background: #ff4d4d; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer; display: flex; justify-content: center; align-items: center; }
-        iframe { width: 100%; height: 800px; border: none; border-radius: 10px; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        
+        /* ESTILOS DEL NUEVO RICH TEXT EDITOR */
+        .rte-container { border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; background: white; margin-top: 5px; }
+        .rte-toolbar { display: flex; gap: 4px; padding: 8px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; flex-wrap: wrap; align-items: center; }
+        .rte-btn { padding: 6px 12px; border: 1px solid #d1d5db; background: #fff; color: #374151; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; }
+        .rte-btn:hover { background: #f3f4f6; }
+        .rte-btn.active { background: #1a2340; color: #fff; } /* El color azul oscuro que usaste en Tiptap */
+        .rte-divider { width: 1px; background: #d1d5db; height: 24px; margin: 0 4px; }
+        .rte-editor { padding: 16px; min-height: 200px; max-height: 400px; overflow-y: auto; outline: none; font-size: 15px; line-height: 1.5; }
+        .rte-editor ul { list-style-type: disc; padding-left: 20px; }
+        .rte-editor ol { list-style-type: decimal; padding-left: 20px; }
+        .rte-editor table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .rte-editor th, .rte-editor td { border: 1px solid #ddd; padding: 8px; }
+
+        iframe { width: 100%; height: 800px; border: none; border-radius: 10px; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -30,8 +50,11 @@
           <button id="btnNext" data-i18n="prevBtnNext"></button>
       </div>
         <h2 data-i18n="prevTitle"></h2>
-        <button id="btnLang" class="settings-btn" title="Change Language">🇪🇸</button>
-        <button id="btnPublish" class="btn-primary" data-i18n="prevBtnPub"></button>
+        
+        <div class="header-actions">
+            <button id="btnLang" class="settings-btn" title="Change Language">🇪🇸</button>
+            <button id="btnPublish" class="btn-primary" data-i18n="prevBtnPub"></button>
+        </div>
     </div>
 
     <div class="panel">
@@ -39,6 +62,7 @@
             <div><label data-i18n="prevLblTitle"></label><input type="text" id="editTitle"></div>
             <div><label data-i18n="prevLblPrice"></label><input type="text" id="editPrice"></div>
             <div><label data-i18n="prevLblSku"></label><input type="text" id="editSku"></div>
+            <div><label data-i18n="prevLblQuantity"></label><input type="number" id="editQty"></div>
             <div><label data-i18n="prevLblCat"></label><input type="text" id="editCategory"></div>
         </div>
 
@@ -49,7 +73,23 @@
 
         <div>
             <label data-i18n="prevLblDesc"></label>
-            <textarea id="editDesc" rows="5"></textarea>
+            <div class="rte-container">
+                <div class="rte-toolbar" id="rteToolbar">
+                    <button type="button" class="rte-btn" data-cmd="bold" title="Bold">B</button>
+                    <button type="button" class="rte-btn" data-cmd="italic" title="Italic">I</button>
+                    <button type="button" class="rte-btn" data-cmd="strikeThrough" title="Strikethrough">S</button>
+                    <div class="rte-divider"></div>
+                    <button type="button" class="rte-btn" data-cmd="formatBlock" data-val="H1" title="Heading 1">H1</button>
+                    <button type="button" class="rte-btn" data-cmd="formatBlock" data-val="H2" title="Heading 2">H2</button>
+                    <div class="rte-divider"></div>
+                    <button type="button" class="rte-btn" data-cmd="insertUnorderedList" title="Bullet List">☰</button>
+                    <button type="button" class="rte-btn" data-cmd="insertOrderedList" title="Ordered List">1.</button>
+                    <div class="rte-divider"></div>
+                    <button type="button" class="rte-btn" data-cmd="undo" title="Undo">↶</button>
+                    <button type="button" class="rte-btn" data-cmd="redo" title="Redo">↷</button>
+                </div>
+                <div id="editDesc" contenteditable="true" class="rte-editor"></div>
+            </div>
         </div>
     </div>
 

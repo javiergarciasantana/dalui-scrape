@@ -6,13 +6,24 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             const precio = document.querySelector(rule.price)?.innerText.trim() || '';
             const sku = rule.sku ? (document.querySelector(rule.sku)?.innerText.trim() || '') : '';
             
-            // Extracción de descripción/especificaciones
+            // --- NUEVA LÓGICA DE DESCRIPCIÓN MÚLTIPLE ---
             let descripcionHtml = "";
             if (rule.desc) {
-                const descNode = document.querySelector(rule.desc);
-                descripcionHtml = descNode ? descNode.outerHTML : "";
+                // Separamos por comas por si has puesto varios selectores
+                const selectores = rule.desc.split(',');
+                
+                selectores.forEach(selector => {
+                    if (!selector.trim()) return;
+                    // Buscamos TODOS los elementos que coincidan con cada selector
+                    const nodos = document.querySelectorAll(selector.trim());
+                    nodos.forEach(nodo => {
+                        // Sumamos el HTML de cada bloque encontrado
+                        descripcionHtml += nodo.outerHTML + "\n<br><br>\n";
+                    });
+                });
             }
 
+            // Extracción de imágenes
             let imagenes = [];
             const imgNodes = document.querySelectorAll(rule.images);
             imgNodes.forEach(img => {
@@ -25,7 +36,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 precio, 
                 sku, 
                 imagenes, 
-                descripcionManual: descripcionHtml, // Enviamos el HTML extraído
+                descripcionManual: descripcionHtml, 
                 categoria: "Auto dalys" 
             });
         } catch (e) {

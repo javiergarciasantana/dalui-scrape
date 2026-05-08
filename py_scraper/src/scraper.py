@@ -55,7 +55,7 @@ def obtener_detalles_internos(session, url_producto):
         print(f"Error al extraer detalles de {url_producto}: {e}")
         return detalles
 
-def buscar_en_daliubaze(keyword_lt):
+def buscar_en_daliubaze(keyword_lt, limite=5):
     base_url = "https://daliubaze.lt"
     target_url = f"{base_url}/autodalys?sPhrase={urllib.parse.quote(keyword_lt)}"
     
@@ -75,7 +75,7 @@ def buscar_en_daliubaze(keyword_lt):
             if not tarjetas:
                 return productos
 
-            for tarjeta in tarjetas[:5]: # Límite de 5 para no demorar mucho
+            for tarjeta in tarjetas[:limite]: # Límite de 5 para no demorar mucho
                 try:
                     caption = tarjeta.find('div', class_='caption')
                     tag_a = caption.find('h3').find('a') if caption and caption.find('h3') else None
@@ -103,7 +103,7 @@ def buscar_en_daliubaze(keyword_lt):
                     continue
 
         # Backup JSON local
-        with open('productos_extraidos.json', 'w', encoding='utf-8') as f:
+        with open('../export/productos_extraidos.json', 'w', encoding='utf-8') as f:
             json.dump(productos, f, ensure_ascii=False, indent=4)
             
         return productos
