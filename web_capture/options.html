@@ -33,22 +33,22 @@
     </div>
 
     <div class="rule-card" style="border-left: 5px solid #FFB81C;">
-        <h3>🔑 Credenciales API de WordPress</h3>
+        <h3 data-i18n="optCred"></h3>
         <div class="form-group">
-            <label>URL de WordPress (ej. https://tudominio.com)</label>
+            <label data-i18n="optCredUrl"></label>
             <input type="text" id="wcUrl" placeholder="https://...">
         </div>
         <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
             <div class="form-group">
-                <label>Consumer Key</label>
+                <label data-i18n="optCredCk"></label>
                 <input type="password" id="wcKey" placeholder="ck_...">
             </div>
             <div class="form-group">
-                <label>Consumer Secret</label>
+                <label data-i18n="optCredCs"></label>
                 <input type="password" id="wcSecret" placeholder="cs_...">
             </div>
         </div>
-        <button id="saveCreds">Guardar Credenciales Seguras</button>
+        <button id="saveCreds" data-i18n="optCredSave"></button>
     </div>
     
     <div class="rule-card">
@@ -78,8 +78,8 @@
             </div>
         </div>
         <div class="form-group">
-            <label>Selectores de Descripción (puedes agrupar varios separados por comas ",")</label>
-            <textarea id="rDesc" rows="3" placeholder="Ejemplo: #productDescriptionAccordion, #productDetailsAccordion"></textarea>
+            <label data-i18n="optDescSel"></label>
+            <textarea id="rDesc" rows="3" data-i18n="optDescPh" placeholder="${t('optDescPh')}"></textarea>
         </div>
         
         <button id="saveRule" data-i18n="optBtnSave"></button>
@@ -93,3 +93,4 @@
     <script src="options.js"></script>
 </body>
 </html>
+

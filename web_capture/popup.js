@@ -22,6 +22,40 @@ document.getElementById('extractSingle').onclick = async () => {
     });
 };
 
+// --- Iniciar Modo Visual (Inyección Forzada) ---
+const btnVisual = document.getElementById('startVisualMode');
+if (btnVisual) {
+    btnVisual.onclick = async () => {
+        let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+        if (!tab.url || tab.url.startsWith("chrome://") || tab.url.startsWith("edge://") || tab.url.startsWith("about:") || tab.url.startsWith("chrome-extension://")) {
+            alert("⚠️ No puedes usar el inspector aquí. Por favor, navega a una tienda real.");
+            return;
+        }
+
+        // Le pedimos al background que inyecte el script a la fuerza antes de enviar el mensaje
+        chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            files: ['content.js']
+        }, () => {
+            if (chrome.runtime.lastError) {
+                console.error("Error inyectando script:", chrome.runtime.lastError.message);
+                alert("⚠️ Error inyectando el inspector. Intenta recargar la página.");
+                return;
+            }
+
+            // Una vez inyectado con éxito, enviamos el mensaje para iniciar
+            chrome.tabs.sendMessage(tab.id, { action: "start_visual_mode", lang: typeof currentLang !== 'undefined' ? currentLang : 'es' }, (response) => {
+                if (chrome.runtime.lastError) {
+                    console.error("Error enviando mensaje:", chrome.runtime.lastError.message);
+                } else {
+                    window.close(); // Cerramos si todo fue bien
+                }
+            });
+        });
+    };
+}
+
 document.getElementById('extractBulk').onclick = () => {
     let urls = document.getElementById('bulkUrls').value.split('\n').map(u => u.trim()).filter(u => u);
     if(urls.length === 0 || urls.length > 5) return alert(t('popErrLimit'));

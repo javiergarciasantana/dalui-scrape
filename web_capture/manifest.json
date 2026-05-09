@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Web Capture for WP",
+  "name": "WP Web Snatcher",
   "version": "2.0",
   "description": "Extractor universal con reglas dinámicas y modo masivo",
   "permissions": [
