@@ -63,9 +63,8 @@
             <div><label data-i18n="prevLblPrice"></label><input type="text" id="editPrice"></div>
             <div><label data-i18n="prevLblSku"></label><input type="text" id="editSku"></div>
             <div><label data-i18n="prevLblQuantity"></label><input type="number" id="editQty"></div>
-            <div><label data-i18n="prevLblCat"></label><input type="text" id="editCategory"></div>
+            <div><label data-i18n="prevLblCat"></label><select id="editCategory"><option value="">Cargando...</option></select></div>       
         </div>
-
         <div class="gallery-container">
             <label data-i18n="prevLblImg"></label>
             <div id="imageGallery" class="gallery"></div>
@@ -97,6 +96,6 @@
     <iframe id="livePreview"></iframe>
 
     <script src="lang/i18n.js"></script>
-    <script src="preview.js"></script>
+    <script type="module" src="preview.js"></script>
 </body>
 </html>
