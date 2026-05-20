@@ -97,29 +97,61 @@ function stopVisualSelector() {
 }
 
 // --- GENERADOR DEL SELECTOR CSS ---
+// --- GENERADOR DEL SELECTOR CSS MEJORADO ---
 function getOptimalSelector(el) {
     if (!el || el.tagName === 'BODY' || el.tagName === 'HTML') return 'body';
     
-    let tag = el.tagName.toLowerCase();
-    
-    if (el.id) return `${tag}#${el.id.trim()}`;
-    
-    if (el.className && typeof el.className === 'string') {
-        let classes = el.className.split(/\s+/).filter(c => c && !c.startsWith('wc-'));
-        if (classes.length > 0) {
-            let selector = `${tag}.${classes.join('.')}`;
-            try {
-                // Probamos si el navegador acepta este selector sin dar error
-                document.querySelector(selector); 
-                return selector;
-            } catch (error) {
-                // Si la web usa clases con caracteres especiales (ej. w-1/2, sm:flex), 
-                // el selector fallará. En ese caso, devolvemos solo la etiqueta.
-                return tag; 
+    // Función interna para sacar el selector de un solo elemento (nodo)
+    function getSingleNodeSelector(node) {
+        let tag = node.tagName.toLowerCase();
+        
+        // 1. Si tiene ID, es la mejor opción
+        if (node.id) return `${tag}#${node.id.trim()}`;
+        
+        // 2. Buscar atributos de datos fuertes que suelen ser únicos y estables
+        const safeAttributes = ['data-test', 'data-testid', 'ksd-gtm-id'];
+        for (let attr of safeAttributes) {
+            if (node.hasAttribute(attr)) {
+                try {
+                    let sel = `${tag}[${attr}="${node.getAttribute(attr)}"]`;
+                    document.querySelector(sel);
+                    return sel;
+                } catch(e) {}
             }
         }
+        
+        // 3. Si tiene clases, las agrupamos
+        if (node.className && typeof node.className === 'string') {
+            let classes = node.className.split(/\s+/).filter(c => c && !c.startsWith('wc-'));
+            if (classes.length > 0) {
+                let selector = `${tag}.${classes.join('.')}`;
+                try {
+                    document.querySelector(selector); 
+                    return selector;
+                } catch (error) {
+                    return tag; 
+                }
+            }
+        }
+        return tag; 
     }
-    return tag; 
+
+    let current = el;
+    let path = [];
+
+    // LÓGICA CLAVE: Subimos hasta 2 niveles en el árbol HTML para armar un selector compuesto
+    while (current && current.tagName !== 'BODY' && path.length < 2) {
+        let sel = getSingleNodeSelector(current);
+        path.unshift(sel); // Añadimos el selector al principio de la ruta
+        
+        // Si el selector actual ya tiene un ID o un atributo seguro, es lo bastante único, dejamos de subir
+        if (sel.includes('#') || sel.includes('[')) break; 
+        
+        current = current.parentElement;
+    }
+
+    // Unimos la ruta con un espacio (ejemplo: "div.MuiBox-root img")
+    return path.join(' '); 
 }
 
 // --- EVENTOS DEL RATÓN ---

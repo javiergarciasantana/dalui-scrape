@@ -54,6 +54,66 @@ document.addEventListener("DOMContentLoaded", async () => {
     editor.addEventListener('mouseup', checkEditorState);
     editor.addEventListener('input', () => updateLivePreview(rawTemplateHtml));
     
+    // --- SOPORTE PARA PEGAR IMÁGENES ---
+    document.addEventListener('paste', (e) => {
+        // Ignorar si el usuario está escribiendo en el Título, Precio, etc.
+        const isInput = e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA';
+        if (isInput) return; 
+
+        // Si está en el editor de texto (RTE), dejamos que el editor se encargue
+        if (e.target.isContentEditable) return; 
+
+        let added = false;
+        const currentImages = getCurrentImages();
+
+        // 1. ¿Es una imagen copiada directamente desde otra página web? (Extraemos el HTML/URL)
+        const html = e.clipboardData.getData('text/html');
+        if (html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const img = doc.querySelector('img');
+            if (img && img.src) {
+                if (!currentImages.includes(img.src)) currentImages.push(img.src);
+                added = true;
+            }
+        }
+
+        // 2. ¿Es un texto que parece una URL de imagen? (ej. https://.../foto.jpg)
+        const text = e.clipboardData.getData('text/plain');
+        if (!added && text && text.match(/^https?:\/\/.*\.(png|jpg|jpeg|webp|gif)/i)) {
+            const cleanUrl = text.trim();
+            if (!currentImages.includes(cleanUrl)) currentImages.push(cleanUrl);
+            added = true;
+        }
+
+        // 3. ¿Es una captura de pantalla pura o un archivo de imagen copiado? (Blob/Base64)
+        if (!added && e.clipboardData.items) {
+            const items = e.clipboardData.items;
+            for (let item of items) {
+                if (item.type.indexOf('image') === 0) {
+                    const blob = item.getAsFile();
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const base64Url = event.target.result;
+                        currentImages.push(base64Url);
+                        renderGallery(currentImages, () => updateLivePreview(rawTemplateHtml));
+                        updateLivePreview(rawTemplateHtml);
+                    };
+                    reader.readAsDataURL(blob);
+                    added = true;
+                    break; // Solo tomamos la primera imagen del portapapeles
+                }
+            }
+        }
+
+        // Si detectamos y procesamos una imagen, recargamos la interfaz y prevenimos acciones nativas
+        if (added) {
+            e.preventDefault();
+            renderGallery(currentImages, () => updateLivePreview(rawTemplateHtml));
+            updateLivePreview(rawTemplateHtml);
+        }
+    });
+    
     // --- CARGA DEL TEMPLATE Y PRODUCTOS ---
     try {
         const response = await fetch(chrome.runtime.getURL("article_page_gnz.html"));
